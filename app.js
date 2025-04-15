@@ -17,10 +17,16 @@ export class App {
     }
 
     init() {
-        // Grid helper - increase divisions for smaller cells
-        const size = 10;          // Total size of the grid
-        const divisions = 50;     // Number of divisions (increase this for smaller cells)
+        // Even finer grid with 50 divisions (0.2 units per cell)
+        const size = 10;
+        const divisions = 50;
         const gridHelper = new THREE.GridHelper(size, divisions);
+        
+        // Lighter grid colors
+        gridHelper.material.color.setHex(0x888888);  // Main grid lines - lighter gray
+        gridHelper.material.opacity = 0.5;           // Make it slightly transparent
+        gridHelper.material.transparent = true;
+        
         this.scene.add(gridHelper);
 
         // Axes helper
@@ -40,7 +46,7 @@ export class App {
         this.scene.add(light);
 
         // Camera Position
-        this.camera.position.set(1, 3, -3);
+        this.camera.position.set(1, 2, -3);
 
         // Load 3D Model
         const loader = new GLTFLoader();
