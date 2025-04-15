@@ -1,5 +1,29 @@
 {
+  "name": "gltf-viewer",
+  "version": "1.0.0",
+  "description": "Web-based GLTF/GLB model viewer with Three.js",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve",
+    "download-deps": "powershell -File download-deps.ps1"
+  },
   "dependencies": {
-    "three": "^0.175.0"
-  }
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "serve": "^14.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dmi3ich/gltf-viewer.git"
+  },
+  "keywords": [
+    "three.js",
+    "gltf",
+    "3d",
+    "viewer",
+    "webgl"
+  ],
+  "author": "dmi3ich",
+  "license": "MIT"
 }
