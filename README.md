@@ -52,6 +52,7 @@ gltf-viewer/
 - Orbit: Left mouse button
 - Pan: Right mouse button
 - Zoom: Mouse wheel
+- Use WASD to move camera around
 - Camera positions are automatically saved between sessions
 
 ## Available Animations
