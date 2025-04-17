@@ -71,3 +71,11 @@ Visit [https://dmi3ich.github.io/gltf-viewer/](https://dmi3ich.github.io/gltf-vi
 - GLTFLoader
 - OrbitControls
 - BufferGeometryUtils
+
+## Todos
+
+- Add antialiasing
+- Add plane for casting shadows
+- UI improvements: models list, HDR controls
+- Add post-processing effects (e.g. tone mapping, bloom, depth of field)
+

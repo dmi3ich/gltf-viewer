@@ -1,6 +1,7 @@
 import * as THREE from './lib/three.module.js';
 import { GLTFLoader } from './lib/GLTFLoader.js';
 import { OrbitControls } from './lib/OrbitControls.js';
+import { RGBELoader } from './lib/RGBELoader.js';
 
 export class App {
     constructor() {
@@ -14,9 +15,17 @@ export class App {
         this.clock = new THREE.Clock();
         this.animations = [];
         this.currentAnimation = null;
+        this.moveSpeed = 0.01;
+        this.moveState = {
+            forward: false,
+            backward: false,
+            left: false,
+            right: false
+        };
 
         this.init();
         this.setupEventListeners();
+        this.setupKeyboardControls();
         // Load camera position after controls are initialized
         this.loadCameraPosition();
         this.animate();
@@ -64,6 +73,18 @@ export class App {
     }
 
     init() {
+        // Enable HDR tone mapping
+        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        this.renderer.toneMappingExposure = 1;
+        this.renderer.outputColorSpace = THREE.SRGBColorSpace;  // Changed from outputEncoding
+
+        const rgbeLoader = new RGBELoader();
+        rgbeLoader.load('./environment/royal_esplanade_1k.hdr', (texture) => {
+            texture.mapping = THREE.EquirectangularReflectionMapping;
+            //this.scene.background = null;  // Don't show environment map
+            this.scene.environment = texture;  // Keep reflections
+        });
+
         // Grid setup
         const size = 10;
         const divisions = 50;
@@ -157,6 +178,26 @@ export class App {
         });
     }
 
+    setupKeyboardControls() {
+        document.addEventListener('keydown', (e) => {
+            switch(e.key.toLowerCase()) {
+                case 'w': this.moveState.forward = true; break;
+                case 's': this.moveState.backward = true; break;
+                case 'a': this.moveState.left = true; break;
+                case 'd': this.moveState.right = true; break;
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            switch(e.key.toLowerCase()) {
+                case 'w': this.moveState.forward = false; break;
+                case 's': this.moveState.backward = false; break;
+                case 'a': this.moveState.left = false; break;
+                case 'd': this.moveState.right = false; break;
+            }
+        });
+    }
+
     playAnimation(name) {
         if (this.mixer) {
             // Stop current animation
@@ -189,6 +230,27 @@ export class App {
             this.controls.update();
         }
 
+        this.update();
         this.renderer.render(this.scene, this.camera);
+    }
+
+    update() {
+        const forward = new THREE.Vector3();
+        this.camera.getWorldDirection(forward);
+        forward.y = 0;
+        forward.normalize();
+        
+        const right = new THREE.Vector3();
+        right.crossVectors(new THREE.Vector3(0, 1, 0), forward).normalize();
+
+        const movement = new THREE.Vector3();
+        if (this.moveState.forward) movement.add(forward.multiplyScalar(this.moveSpeed));
+        if (this.moveState.backward) movement.add(forward.multiplyScalar(-this.moveSpeed));
+        if (this.moveState.left) movement.add(right.multiplyScalar(this.moveSpeed));
+        if (this.moveState.right) movement.add(right.multiplyScalar(-this.moveSpeed));
+
+        this.camera.position.add(movement);
+        this.controls.target.add(movement);
+        this.controls.update();
     }
 }
