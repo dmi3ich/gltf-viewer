@@ -112,7 +112,8 @@ export class App {
         document.body.appendChild(this.renderer.domElement);
 
         // Camera position
-        this.camera.position.set(0, 2, 5);
+        this.camera.position.set(1.4, 1, -2.0);  // Adjusted for better viewpoint
+        this.camera.lookAt(-0.3, 0.7, 1.3);  // Look at the center of the scene
         
         // OrbitControls setup
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
