@@ -72,6 +72,7 @@ Visit [https://dmi3ich.github.io/gltf-viewer/](https://dmi3ich.github.io/gltf-vi
 - GLTFLoader
 - OrbitControls
 - BufferGeometryUtils
+- RGBELoader.js
 
 ## Todos
 
